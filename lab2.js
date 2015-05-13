@@ -30,13 +30,11 @@ function assertDeepEqual(actual, expected, failureMessage) {
     }
   }
   catch (err) {
-    console.log('assertion failure: ', err,
-                '\nexpected:', expected,
-                '\nactual:', actual);
+    console.log("assertion failure: ", err,
+                "\nexpected:", expected,
+                "\nactual:", actual);
   }
 }
-
-
 
 //*********************************************************
 // PROBLEM 1: The Blob. 20 points
@@ -62,8 +60,20 @@ function assertDeepEqual(actual, expected, failureMessage) {
  TODO: Then, use a loop to calculate how long it took the blob to finish
  with Dowington.
 */
+function Blob(name) {
+    this.name = name;
+}
 
-var hoursSpentInDowington; // TODO: assign me the value of the
+var blob = new Blob("blobber");
+var dowingtonPopulation = 1000, hours = 0, rate = 1;
+
+while (dowingtonPopulation > 0) {
+  dowingtonPopulation -= rate;
+  hours++;
+  rate++;
+}
+
+var hoursSpentInDowington = hours; // TODO: assign me the value of the
                            // above calculation
 
 // Now, write a method that takes a population for an arbitrary
@@ -72,13 +82,26 @@ var hoursSpentInDowington; // TODO: assign me the value of the
 
 function hoursToOoze(population, peoplePerHour) {
   // TODO: implement me based on the instructions above. Be sure to then assign me to the Blob's prototype.
+    //this.rate = rate;
+  var hours = 0;
+  while (population > 0) {
+    population -= peoplePerHour;
+    hours++;
+    peoplePerHour++;
+  }
+  return hours;
 }
+Blob.prototype.hoursToOoze = hoursToOoze;
+
 assert(blob.hoursToOoze(0, 1) === 0, "no people means no time needed.");
 assert(blob.hoursToOoze(1000, 1) === hoursSpentInDowington,
   "hoursSpentInDowington should match hoursToOoze\"s result for 1000");
 
 // TODO: write three more assertions like the two above, testing out
 // the hoursToOoze method.
+assert(blob.hoursToOoze(20, 1) === 6, "hours should be 6");
+assert(blob.hoursToOoze(22, 1) === 7, "hours should be 7");
+assert(blob.hoursToOoze(100, 2) === 13, "hours should be 13");
 
 //*********************************************************
 // PROBLEM 2: Universal Translator. 20 points
@@ -94,9 +117,11 @@ var hello = {
 // sentient beings. They have a home planet, a language that they
 // speak, and method called sayHello.
 
-function SentientBeing () {
+function SentientBeing (home, language) {
   // TODO: specify a home planet and a language
   // you'll need to add parameters to this constructor
+  this.home = home;
+  this.language = language;
 }
 
 // sb is a SentientBeing object
@@ -108,15 +133,55 @@ function sayHello (sb) {
     // to do the translating
 
     //TODO: put this on the SentientBeing prototype
-  }
+    console.log("The speaker says " + hello[this.language]);
+
+    return hello[sb.language];
+}
+SentientBeing.prototype.sayHello = sayHello;
 
 // TODO: create three subclasses of SentientBeing, one for each
 // species above (Klingon, Human, Romulan).
+function Klingon () {
+  SentientBeing.call( this, "Qo\"noS", "klingon");
+}
+Klingon.prototype = Object.create(SentientBeing.prototype);
+Klingon.prototype.constructor = Klingon;
 
-assert((new Human()).sayHello(new Klingon()) === "nuqneH",
-  "the klingon should hear nuqneH");
+function Human () {
+  SentientBeing.call( this, "Earth", "federation standard");
+}
+Human.prototype = Object.create(SentientBeing.prototype);
+Human.prototype.constructor = Human;
+
+function Romulan () {
+  SentientBeing.call( this, "Romulus", "romulan");
+}
+Romulan.prototype = Object.create(SentientBeing.prototype);
+Romulan.prototype.constructor = Romulan;
+
+var klingon = new Klingon();
+var human = new Human();
+var romulan = new Romulan();
+
+// Changing asserts to 1) use object created above instead of creating new object
+//    in each assert and 2) use hello object to get languages
+//assert((new Human()).sayHello(new Klingon()) === "nuqneH",
+//  "the klingon should hear nuqneH");
+assert(human.sayHello(klingon) === hello[klingon.language],
+  "the klingon should hear ".concat(hello[klingon.language]));
+
 // TODO: write five more assertions, to complete all the possible
 // greetings between the three types of sentient beings you created above.
+assert(human.sayHello(romulan) === hello[romulan.language],
+  "the romulan should hear ".concat(hello[romulan.language]));
+assert(klingon.sayHello(human) === hello[human.language],
+  "the human should hear ".concat(hello[human.language]));
+assert(klingon.sayHello(romulan) === hello[romulan.language],
+  "the romulan should hear ".concat(hello[romulan.language]));
+assert(romulan.sayHello(human) === hello[human.language],
+  "the human should hear ".concat(hello[human.language]));
+assert(romulan.sayHello(klingon) === hello[klingon.language],
+  "the klingon should hear ".concat(hello[klingon.language]));
 
 //*********************************************************
 // PROBLEM 3: Sorting. 20 points.
@@ -125,34 +190,69 @@ assert((new Human()).sayHello(new Klingon()) === "nuqneH",
 // assertions for each one
 //*********************************************************
 function lastLetterSort(stringArray) {
-  function byLastLetter(array) {
+
+  function byLastLetter(a, b) {
     //TODO: implement me. sort the strings in alphabetical
     // order using their last letter
     // read this: http://www.w3schools.com/jsref/jsref_sort.asp
+    return a.charCodeAt(a.length - 1) - b.charCodeAt(b.length - 1);
   }
   stringArray.sort(byLastLetter);
+
+  return stringArray;
 }
 
 assertDeepEqual(
-  lastLetterSort( [ 'blue', 'red', 'green' ] ),
-  [ 'red', 'blue', 'green' ],
-  'array not sorted by last letter'
+  lastLetterSort( [ "blue", "red", "green" ] ),
+  [ "red", "blue", "green" ],
+  "array not sorted by last letter"
+);
+assertDeepEqual(
+  lastLetterSort( [ "Alex", "Mike", "Graham", "Gia", "Elias" ] ),
+  [ "Gia", "Mike", "Graham", "Elias", "Alex" ],
+  "array not sorted by last letter"
+);
+assertDeepEqual(
+  lastLetterSort( [ "Kentucky", "Louisiana", "Texas", "Washgington", "Oregon", "Delaware", "Wyoming", "Mississippi" ] ),
+  [ "Louisiana", "Delaware", "Wyoming", "Mississippi", "Washgington", "Oregon", "Texas", "Kentucky" ],
+  "array not sorted by last letter"
 );
 
 function sumArray(numberArray) {
-  var sum = 0;
+
   // TODO: implement me using forEach
+  var sum = 0;
+  numberArray.forEach(function(element) {
+    sum += element;
+  });
+
   return sum;
 }
 
+assert(sumArray( [ 100, 200, 300, 400, 500, 600 ] ) === 2100, "Array sum should be 2100");
+assert(sumArray([ 1, 1, 1, 1, 1, 1 ]) === 6, "Array sum should be 6");
+
 function sumSort(arrayOfArrays) {
-  arrayOfArrays.sort(function(item) {
+  arrayOfArrays.sort(function(a, b) {
     // TODO: implement me using sumArray
     //  order the arrays based on the sum of the numbers
     //  inside each array
+    return sumArray(a) - sumArray(b);
   });
+  return arrayOfArrays;
 }
 
+assertDeepEqual(
+  sumSort( [ [ 2, 2 ], [ 1, 1 ] ] ),
+  [ [ 1, 1 ], [ 2, 2 ] ],
+  "arrays not sorted by sum"
+);
+
+assertDeepEqual(
+  sumSort( [ [ 200, 3300 ], [ 1, 1, 1, 1 ], [ 2, 3, 4, 5 ], [ 2 ] ] ),
+  [ [ 2 ], [ 1, 1, 1, 1 ], [ 2, 3, 4, 5 ], [ 200, 3300 ] ],
+  "arrays not sorted by sum"
+);
 //*********************************************************
 // PROBLEM 4: Cleanup: 10 points
 // Makes sure this file passes jshint and jscs
