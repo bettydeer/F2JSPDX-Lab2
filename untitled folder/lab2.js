@@ -83,6 +83,7 @@ var blob2 = new Blob(1500, 1);
 var blob3x = new Blob(1000, 3);
 var blob100k = new Blob(100000, 1);
 // console.log(blob2.hoursToOoze(this.population, this.peoplePerHour));
+
 function hoursSpentInDowington() {
   var peopleLeft = 1000;
   var hour2 = 0;
@@ -116,10 +117,6 @@ function hoursSpentInDowington() {
 
 // assert(blob100k.hoursToOoze(100000, 1) === 84,
 //    "blob.110k.hoursToOoze(100000, 1) should return 84");
-
-assert(blob.hoursToOoze(0, 1) === 0, "no people means no time needed.");
-assert(blob.hoursToOoze(1000, 1) === hoursSpentInDowington,
-  "hoursSpentInDowington should match hoursToOoze\"s result for 1000");
 
 // TODO: write three more assertions like the two above, testing out
 // the hoursToOoze method.
@@ -239,12 +236,6 @@ assertDeepEqual (
 );
 
 var testArray = [ 4, 6, 9, 2, 3 ];
-
-assertDeepEqual(
-  lastLetterSort( [ "blue", "red", "green" ] ),
-  [ "red", "blue", "green" ],
-  "array not sorted by last letter"
-);
 
 function sumArray(numberArray) {
   sum = 0;
