@@ -26,6 +26,22 @@
 .
 */
 
+function Blob(){
+    this.peoplePerHour = 1;
+}
+
+
+Blob.prototype.eatTown = function(population){
+    var hour = 0;
+    while (population > 0){
+      population -= this.peoplePerHour;
+      this.peoplePerHour++;
+      hour++;
+    }
+    return hour;
+};
+
+
 var Nowhereville = 0;
 var Dowington = 1000;
 var Smallsville = 5000;

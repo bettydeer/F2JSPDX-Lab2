@@ -5,15 +5,18 @@
 // assertions for each one
 //*********************************************************
 
+
 /* PART 1 */
 
 function lastLetterSort(stringArray) {
-
-  stringArray.sort(function(a, b){
-    //TODO: implement me. sort the strings in alphabetical
-    // order using their last letter
-    // read this: http://www.w3schools.com/jsref/jsref_sort.asp
+  stringArray.sort(function(a,b){
+    var lastLetterofA = a[a.length-1];
+    var lastLetterofB = b[b.length-1];
+    if (lastLetterofA < lastLetterofB) return -1
+    if (lastLetterofA === lastLetterofB) return 0;
+    if (lastLetterofA > lastLetterofB) return 1;
   });
+  return stringArray;
 
 }
 
@@ -30,20 +33,35 @@ var arrayOfArrays = [ [ 1, 4, 3 ], [ 6, 2, 3 ], [ 3, 9 ], [ 0, 1 ] ]
 
 function sumArray(numberArray) {
   var sum = 0;
+  numberArray.forEach(function(number){
+    sum = sum + number;
+  });
+
   // TODO: implement me using forEach
   return sum;
 }
 
 function sumSort(arrayOfArrays) {
   arrayOfArrays.sort(function(a, b) {
+    var sumA = sumArray(a);
+    var sumB = sumArray(b);
+    if (sumA > sumB) return +1;
+    if (sumA < sumB) return -1;
+    if (sumA === sumB) return 0;
+
     // TODO: implement me using sumArray
     //  order the arrays based on the sum of the numbers
     //  inside each array
   });
+  return arrayOfArrays;
 }
 
 // write an assertion that tests the above code
-
+assertDeepEqual(
+    sumSort(arrayOfArrays),
+    [  [0, 1 ], [ 1, 4, 3 ], [ 6, 2, 3 ], [ 3, 9 ] ],
+    "array not in sorted order"
+    );
 
 
 
